@@ -11,20 +11,25 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-var coll *mongo.Collection
+var (
+	cli  *mongo.Client
+	err  error
+	coll *mongo.Collection
+)
 
-func initCollection() {
-	coll = config.GetClient().Database("yanaDB").Collection("posts")
-
+func Init() {
+	cli = config.NewMongoClient()
+	coll = cli.Database("yanaDb").Collection("Posts")
 }
 
 func CreatePost(mpo model.Post) {
-	initCollection()
+	Init()
 	coll.InsertOne(context.TODO(), bson.M{
 		"code":        mpo.Code,
 		"title":       mpo.Title,
 		"company":     mpo.Company,
 		"location":    mpo.Location,
+		"type":        mpo.Type,
 		"description": mpo.Description,
 		"dateCreated": time.Now(),
 		"lastUpdated": time.Now(),

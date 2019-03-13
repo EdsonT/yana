@@ -4,8 +4,7 @@ import (
 	// "context"
 
 	"fmt"
-
-	"yana/core/features/post"
+	"yanaEngine/core/features/post"
 
 	"github.com/gin-gonic/gin"
 	// "yana/config"
