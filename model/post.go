@@ -3,7 +3,7 @@ package model
 import "time"
 
 type Post struct {
-	Code        string `json:"code"`
+	Code        string `json:"code" bson:"code"`
 	Title       string `json:"title"`
 	Company     string `json:"company"`
 	Location    string `json:"location"`

@@ -2,6 +2,8 @@ package post
 
 import (
 	"context"
+	"fmt"
+	"log"
 	"time"
 	"yana/config"
 	"yana/model"
@@ -34,4 +36,31 @@ func CreatePost(mpo model.Post) {
 		"dateCreated": time.Now(),
 		"lastUpdated": time.Now(),
 	})
+}
+func GetPost() []*model.Post {
+	var results []*model.Post
+	Init()
+	// findOpts := options.Find()
+	// findOpts.SetLimit(3)
+	cur, err := coll.Find(context.TODO(), bson.M{})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for cur.Next(context.TODO()) {
+		var elem model.Post
+		err = cur.Decode(&elem)
+		if err != nil {
+			log.Fatal(err)
+		}
+		results = append(results, &elem)
+
+	}
+	fmt.Println(results)
+
+	if err := cur.Err(); err != nil {
+		log.Fatal(err)
+	}
+	return results
+
 }

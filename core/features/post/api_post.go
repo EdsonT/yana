@@ -2,6 +2,7 @@ package post
 
 import (
 	// "fmt"
+
 	"yana/model"
 
 	"github.com/gin-gonic/gin"
@@ -27,6 +28,9 @@ func AddRoutes(rg *gin.RouterGroup) {
 		CreatePost(np)
 		c.JSON(200, "success")
 
+	})
+	rg.GET("/", func(c *gin.Context) {
+		c.JSON(200, GetPost())
 	})
 
 }

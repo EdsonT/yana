@@ -14,7 +14,7 @@ var (
 	err  error
 )
 // NewMongoClient creates a mongo client connection with the necessary parameters
-func NewCli() *mongo.Client {
+func NewMongoClient() *mongo.Client {
 	opt = &options.ClientOptions{}
 	auth = options.Credential{
 		AuthSource: "yanaDb",
