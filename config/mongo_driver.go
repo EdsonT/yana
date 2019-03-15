@@ -21,9 +21,15 @@ func NewMongoClient() *mongo.Client {
 		Username:   "admin",
 		Password:   "Setitiruces0",
 	}
-	opt.SetAuth(auth)
-	opt.ApplyURI("mongodb://ec2-3-18-8-186.us-east-2.compute.amazonaws.com:27017")
-	// cli, err = mongo.NewClient(options.Client().ApplyURI("mongo://10.31.32.66:27017"))
+	// ec2-mongo
+	// opt.SetAuth(auth)
+	// opt.ApplyURI("mongodb://ec2-3-18-8-186.us-east-2.compute.amazonaws.com:27017")
+
+	
+	// localConfig
+	opt.ApplyURI("mongodb://10.31.32.66:27017")
+
+	
 
 	cli, err = mongo.NewClient(opt)
 
