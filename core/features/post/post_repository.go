@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"time"
 	"yana/config"
 	"yana/model"
 
@@ -24,18 +23,9 @@ func Init() {
 	coll = cli.Database("yanaDb").Collection("Posts")
 }
 
-func CreatePost(mpo model.Post) {
+func AddPost(mpo *model.Post) (*mongo.InsertOneResult, error) {
 	Init()
-	coll.InsertOne(context.TODO(), bson.M{
-		"code":        mpo.Code,
-		"title":       mpo.Title,
-		"company":     mpo.Company,
-		"location":    mpo.Location,
-		"type":        mpo.Type,
-		"description": mpo.Description,
-		"dateCreated": time.Now(),
-		"lastUpdated": time.Now(),
-	})
+	return coll.InsertOne(context.TODO(), mpo)
 }
 func GetPost() []*model.Post {
 	var results []*model.Post
@@ -62,5 +52,10 @@ func GetPost() []*model.Post {
 		log.Fatal(err)
 	}
 	return results
+}
 
+func FindPost(id string){
+	Init()
+	res:=coll.FindOne(context.TODO(),id)
+	fmt.Println(res)
 }

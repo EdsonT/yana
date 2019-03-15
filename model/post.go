@@ -1,6 +1,8 @@
 package model
 
-import "time"
+import (
+	"time"
+)
 
 type Post struct {
 	Code        string `json:"code" bson:"code"`
@@ -9,6 +11,6 @@ type Post struct {
 	Location    string `json:"location"`
 	Type        string `json:"type"`
 	Description string `json:"description"`
-	DateCreated time.Time 
-	LastUpdated time.Time 
+	DateCreated time.Time
+	LastUpdated time.Time
 }
