@@ -1,4 +1,4 @@
-package post
+package company
 
 import (
 	"context"
@@ -19,15 +19,15 @@ var (
 
 func Init() {
 	cli = config.NewMongoClient()
-	coll = cli.Database("yanaDb").Collection("Posts")
+	coll = cli.Database("yanaDb").Collection("Company")
 }
 
-func AddPost(mpo *model.Post) (*mongo.InsertOneResult, error) {
+func AddPost(mpo *model.Company) (*mongo.InsertOneResult, error) {
 	Init()
 	return coll.InsertOne(context.TODO(), mpo)
 }
-func GetPost() []*model.Post {
-	var results []*model.Post
+func GetPost() []*model.Company {
+	var results []*model.Company
 	Init()
 
 	cur, err := coll.Find(context.TODO(), bson.M{})
@@ -36,7 +36,7 @@ func GetPost() []*model.Post {
 	}
 
 	for cur.Next(context.TODO()) {
-		var elem model.Post
+		var elem model.Company
 		err = cur.Decode(&elem)
 		if err != nil {
 			log.Fatal(err)
