@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"time"
 	"yana/config"
 	"yana/model"
 
@@ -89,7 +90,7 @@ func UpdatePost(code string, params model.Company) (*mongo.UpdateResult, error) 
 	Init()
 	filter := bson.D{{"code", code}}
 	update := bson.D{
-		{"$set", params},
+		{"$set", params, bson.D{"lastupdated", time.Now()}},
 	}
 	res, err := coll.UpdateOne(context.TODO(), filter, update)
 	fmt.Println(res)

@@ -57,6 +57,5 @@ func AddRoutes(rg *gin.RouterGroup) {
 		fmt.Println(c.Param("code"))
 		res, _ := UpdatePost(code, np)
 		c.JSON(200, res)
-
 	})
 }
