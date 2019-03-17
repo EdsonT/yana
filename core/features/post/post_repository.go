@@ -22,11 +22,11 @@ func Init() {
 	coll = cli.Database("yanaDb").Collection("Posts")
 }
 
-func AddPost(mpo *model.Post) (*mongo.InsertOneResult, error) {
+func Add(mpo *model.Post) (*mongo.InsertOneResult, error) {
 	Init()
 	return coll.InsertOne(context.TODO(), mpo)
 }
-func GetPost(params model.Post) []*model.Post {
+func Get(params model.Post) []*model.Post {
 	var (
 		results []*model.Post
 		cur     *mongo.Cursor
@@ -55,7 +55,7 @@ func GetPost(params model.Post) []*model.Post {
 	}
 	return results
 }
-func UpdatePost(code string, params model.Post) (*mongo.UpdateResult, error) {
+func Update(code string, params model.Post) (*mongo.UpdateResult, error) {
 	Init()
 	filter := bson.D{{"code", code}}
 	update := bson.D{
@@ -66,10 +66,13 @@ func UpdatePost(code string, params model.Post) (*mongo.UpdateResult, error) {
 	return res, err
 }
 
-func FindPost(id string) {
+func Find(code string) model.Post{
 	Init()
-	res := coll.FindOne(context.TODO(), id)
-	fmt.Println(res)
+	var res model.Post
+	filter:=bson.D{{"code",code}}
+	coll.FindOne(context.TODO(), filter).Decode(&res)
+
+	return res 
 }
 func CountRecords() int64 {
 	Init()
