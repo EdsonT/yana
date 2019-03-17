@@ -45,5 +45,9 @@ func AddRoutes(rg *gin.RouterGroup) {
 		DeletCompanyPhysics(code)
 		c.JSON(200, "success")
 	})
-
+	rg.PUT("/:code", func(c *gin.Context) {
+		code := c.Param("code")
+		DeletCompanyLogical(code)
+		c.JSON(200, "success")
+	})
 }

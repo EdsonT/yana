@@ -71,25 +71,17 @@ func CountRecords() int64 {
 
 func DeletCompanyPhysics(cod string) *mongo.SingleResult {
 	Init()
-	// ress := coll.(context.TODO(), bson.D{{"code", cod}})
-	// fmt.Println(ress.Err)
-
-	// filter := bson.D{{cod}}
-	// update := bson.D{
-	// {"$inc", bson.D{"status", "inactivo"}}}
 	res := coll.FindOneAndDelete(context.TODO(), bson.D{{"code", cod}})
-
 	return res
 }
-func DeletCompanyLogical(cod string) *mongo.SingleResult {
+func DeletCompanyLogical(cod string) (*mongo.UpdateResult, error) {
 	Init()
-	// ress := coll.(context.TODO(), bson.D{{"code", cod}})
-	// fmt.Println(ress.Err)
-
-	// filter := bson.D{{cod}}
-	// update := bson.D{
-	// {"$inc", bson.D{"status", "inactivo"}}}
-	res := coll.FindOneAndDelete(context.TODO(), bson.D{{"code", cod}})
-
-	return res
+	params := bson.D{{"status", "Inactive"}}
+	filter := bson.D{{"code", cod}}
+	update := bson.D{
+		{"$set", params},
+	}
+	res, err := coll.UpdateOne(context.TODO(), filter, update)
+	fmt.Println(res, err)
+	return res, err
 }
