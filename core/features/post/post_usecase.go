@@ -36,3 +36,14 @@ func Search(params *model.Post) []model.Post {
 	var result []model.Post
 	return result
 }
+func DeletePost(code string) (string, error) {
+	result, err := DeletePostLogical(code)
+	if err == nil {
+		log.Println("Object Deleted:", result)
+		return "success", nil
+	} else {
+		log.Println(err)
+		return "", err
+	}
+
+}

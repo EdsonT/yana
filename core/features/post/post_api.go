@@ -8,6 +8,7 @@ import (
 	"yana/model"
 
 	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 func SetBaseRoutePost(r *gin.Engine) *gin.Engine {
@@ -22,7 +23,7 @@ func AddRoutes(rg *gin.RouterGroup) {
 		c.JSON(200, gin.H{
 			"message": "pong",
 		})
-	})	
+	})
 	rg.GET("/", func(c *gin.Context) {
 		var np model.Post
 
@@ -55,9 +56,12 @@ func AddRoutes(rg *gin.RouterGroup) {
 	// 	c.JSON(200, "success")
 	// })
 	rg.DELETE("/:code", func(c *gin.Context) {
-		code := c.Param("code")
-		DeletePostLogical(code)
-		c.JSON(200, "success")
+		res, err := DeletePost(c.Param("code"))
+		if res != "" {
+			c.JSON(200, bson.M{"status": res})
+		} else {
+			c.JSON(500, err)
+		}
 	})
 
 }

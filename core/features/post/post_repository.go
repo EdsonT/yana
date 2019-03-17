@@ -95,6 +95,5 @@ func DeletePostLogical(cod string) (*mongo.UpdateResult, error) {
 		{"$set", params},
 	}
 	res, err := coll.UpdateOne(context.TODO(), filter, update)
-	fmt.Println(res, err)
 	return res, err
 }
