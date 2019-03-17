@@ -7,6 +7,7 @@ import (
 	"yana/config"
 	"yana/model"
 
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -53,6 +54,16 @@ func GetPost(params model.Post) []*model.Post {
 		log.Fatal(err)
 	}
 	return results
+}
+func UpdatePost(code string, params model.Post) (*mongo.UpdateResult, error) {
+	Init()
+	filter := bson.D{{"code", code}}
+	update := bson.D{
+		{"$set", params},
+	}
+	res, err := coll.UpdateOne(context.TODO(), filter, update)
+	fmt.Println(res)
+	return res, err
 }
 
 func FindPost(id string) {

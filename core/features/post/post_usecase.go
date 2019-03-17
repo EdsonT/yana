@@ -22,6 +22,7 @@ func CreateNewPost(params *model.Post) (*mongo.InsertOneResult, error) {
 	return result, err
 }
 
-func Search() {
-
+func Search(params *model.Post) []model.Post {
+	var result []model.Post
+	return result
 }
