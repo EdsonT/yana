@@ -51,11 +51,11 @@ func AddRoutes(rg *gin.RouterGroup) {
 		c.JSON(200, "success")
 	})
 	rg.PUT("/:code", func(c *gin.Context) {
-		var np model.Post
-
+		var np model.Company
+		code := c.Param("code")
 		c.BindJSON(&np)
 		fmt.Println(c.Param("code"))
-		res,_ := UpdatePost(c.Param("code"), np)
+		res, _ := UpdatePost(code, np)
 		c.JSON(200, res)
 
 	})

@@ -16,6 +16,7 @@ func CreateNewPost(params *model.Post) (model.Post, error) {
 	np.Location = params.Location
 	np.Company = params.Company
 	np.Type = params.Type
+	np.Status = "Active"
 	np.DateCreated = time.Now()
 	np.LastUpdated = time.Now()
 	result, err := Add(np)
