@@ -3,6 +3,7 @@ package post
 import (
 	// "fmt"
 
+	"fmt"
 	"log"
 	"yana/model"
 
@@ -39,6 +40,16 @@ func AddRoutes(rg *gin.RouterGroup) {
 		// fmt.Println(np)
 		CountRecords()
 		c.JSON(200, GetPost(np))
+
+	})
+
+	rg.PUT("/:code", func(c *gin.Context) {
+		var np model.Post
+
+		c.BindJSON(&np)
+		fmt.Println(c.Param("code"))
+		res,_ := UpdatePost(c.Param("code"), np)
+		c.JSON(200, res)
 
 	})
 
