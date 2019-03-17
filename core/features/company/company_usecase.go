@@ -16,6 +16,7 @@ func CreateNewPost(params *model.Company) (*mongo.InsertOneResult, error) {
 	np.City = params.City
 	np.Country = params.Country
 	np.Description = params.Description
+	np.Address = params.Address
 	np.Status = "Active"
 	np.DateCreated = time.Now()
 	np.LastUpdated = time.Now()

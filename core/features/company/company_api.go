@@ -25,6 +25,7 @@ func AddRoutes(rg *gin.RouterGroup) {
 	rg.POST("/create", func(c *gin.Context) {
 		var np *model.Company
 		c.BindJSON(&np)
+		fmt.Println(np.Address)
 		CreateNewPost(np)
 		c.JSON(200, "success")
 

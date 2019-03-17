@@ -89,10 +89,15 @@ func DeletCompanyLogical(cod string) (*mongo.UpdateResult, error) {
 func UpdatePost(code string, params model.Company) (*mongo.UpdateResult, error) {
 	Init()
 	filter := bson.D{{"code", code}}
+	params.LastUpdated = time.Now()
 	update := bson.D{
-		{"$set", params, bson.D{"lastupdated", time.Now()}},
+		{"$set", params},
 	}
 	res, err := coll.UpdateOne(context.TODO(), filter, update)
+	// updatwe := bson.D{
+	// 	{"$set", bson.D{"lastupdated", time.Now()}},
+	// }
+	// res, err := coll.UpdateOne(context.TODO(), filter, update)
 	fmt.Println(res)
 	return res, err
 
