@@ -7,8 +7,6 @@ import (
 	"yana/config"
 	"yana/model"
 
-	"go.mongodb.org/mongo-driver/bson"
-
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -34,14 +32,8 @@ func GetPost(params model.Post) []*model.Post {
 		err     error
 	)
 	Init()
-	// findOpts := options.Find()
-	// findOpts.SetLimit(3)
-	// fmt.Println(params)
-	if params != (model.Post{}) {
-		cur, err = coll.Find(context.TODO(), params)
-	} else {
-		cur, err = coll.Find(context.TODO(), bson.M{})
-	}
+
+	cur, err = coll.Find(context.TODO(), params)
 
 	if err != nil {
 		log.Fatal(err)
