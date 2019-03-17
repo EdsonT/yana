@@ -85,3 +85,13 @@ func DeletCompanyLogical(cod string) (*mongo.UpdateResult, error) {
 	fmt.Println(res, err)
 	return res, err
 }
+func UpdatePost(code string, params model.Post) (*mongo.UpdateResult, error) {
+	Init()
+	filter := bson.D{{"code", code}}
+	update := bson.D{
+		{"$set", params},
+	}
+	res, err := coll.UpdateOne(context.TODO(), filter, update)
+	fmt.Println(res)
+	return res, err
+}

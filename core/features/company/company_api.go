@@ -40,14 +40,23 @@ func AddRoutes(rg *gin.RouterGroup) {
 		c.JSON(200, GetPost(np))
 
 	})
+	// rg.DELETE("/:code", func(c *gin.Context) {
+	// 	code := c.Param("code")
+	// 	DeletCompanyPhysics(code)
+	// 	c.JSON(200, "success")
+	// })
 	rg.DELETE("/:code", func(c *gin.Context) {
-		code := c.Param("code")
-		DeletCompanyPhysics(code)
-		c.JSON(200, "success")
-	})
-	rg.PUT("/:code", func(c *gin.Context) {
 		code := c.Param("code")
 		DeletCompanyLogical(code)
 		c.JSON(200, "success")
+	})
+	rg.PUT("/:code", func(c *gin.Context) {
+		var np model.Post
+
+		c.BindJSON(&np)
+		fmt.Println(c.Param("code"))
+		res,_ := UpdatePost(c.Param("code"), np)
+		c.JSON(200, res)
+
 	})
 }

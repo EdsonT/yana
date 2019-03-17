@@ -52,5 +52,15 @@ func AddRoutes(rg *gin.RouterGroup) {
 		c.JSON(200, res)
 
 	})
+	// rg.DELETE("/:code", func(c *gin.Context) {
+	// 	code := c.Param("code")
+	// 	DeletePostPhysics(code)
+	// 	c.JSON(200, "success")
+	// })
+	rg.DELETE("/:code", func(c *gin.Context) {
+		code := c.Param("code")
+		DeletePostLogical(code)
+		c.JSON(200, "success")
+	})
 
 }
