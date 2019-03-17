@@ -10,5 +10,5 @@ type Company struct {
 	Address     string
 	Description string
 	DateCreated time.Time
-	LastUpdated string
+	LastUpdated time.Time
 }

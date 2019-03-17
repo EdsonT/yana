@@ -56,7 +56,6 @@ func GetPost(params model.Post) []*model.Post {
 		results = append(results, &elem)
 
 	}
-	fmt.Println(results)
 
 	if err := cur.Err(); err != nil {
 		log.Fatal(err)
