@@ -27,12 +27,22 @@ func AddPost(mpo *model.Post) (*mongo.InsertOneResult, error) {
 	Init()
 	return coll.InsertOne(context.TODO(), mpo)
 }
-func GetPost() []*model.Post {
-	var results []*model.Post
+func GetPost(params model.Post) []*model.Post {
+	var (
+		results []*model.Post
+		cur     *mongo.Cursor
+		err     error
+	)
 	Init()
 	// findOpts := options.Find()
 	// findOpts.SetLimit(3)
-	cur, err := coll.Find(context.TODO(), bson.M{})
+	// fmt.Println(params)
+	if params != (model.Post{}) {
+		cur, err = coll.Find(context.TODO(), params)
+	} else {
+		cur, err = coll.Find(context.TODO(), bson.M{})
+	}
+
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -54,8 +64,16 @@ func GetPost() []*model.Post {
 	return results
 }
 
-func FindPost(id string){
+func FindPost(id string) {
 	Init()
-	res:=coll.FindOne(context.TODO(),id)
+	res := coll.FindOne(context.TODO(), id)
 	fmt.Println(res)
+}
+func CountRecords() int64 {
+	Init()
+	// var opts *options.EstimatedDocumentCountOptions
+	// opts.SetMaxTime(3)
+	res, _ := coll.EstimatedDocumentCount(context.Background())
+	fmt.Println(res)
+	return res
 }

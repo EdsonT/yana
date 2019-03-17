@@ -6,6 +6,8 @@ import (
 	"time"
 	"yana/model"
 
+	"github.com/rs/xid"
+
 	"go.mongodb.org/mongo-driver/bson"
 )
 
@@ -26,8 +28,41 @@ func TestCreateNewPost(t *testing.T) {
 		t.Fatal(err)
 	}
 	if params.Code != retr.Code {
-		t.Fatal("Test Failed", params.Code,retr.Code)
+		t.Fatal("Test Failed", params.Code, retr.Code)
 		t.Fail()
+	}
+
+}
+
+func TestSearch(t *testing.T) {
+	reg := new(model.Post)
+	reg.Company = "testCompany"
+	reg.Title = "testTitle"
+	reg.Type = "testType"
+	reg.Location = "testLocation"
+	CreateNewPost(reg)
+	var params *model.Post
+	params = new(model.Post)
+	params.Title = "testTitle"
+	result := Search(params)
+
+	if params == nil {
+		total := CountRecords()
+		if len(result) != total {
+			t.Fatal("Test Failed")
+		}
+	} else {
+		if len(result) == 0 {
+			t.Fatal("Test Failed")
+		}
+	}
+
+	params.Code = xid.New().String()
+
+	result := Search(params)
+
+	if result > 0 {
+		t.Fatal("Test Failed")
 	}
 
 }
