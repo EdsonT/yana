@@ -1,8 +1,8 @@
 package company
 
 import (
-	// "fmt"
-
+	"fmt"
+	"log"
 	"yana/model"
 
 	"github.com/gin-gonic/gin"
@@ -30,7 +30,20 @@ func AddRoutes(rg *gin.RouterGroup) {
 
 	})
 	rg.GET("/", func(c *gin.Context) {
-		c.JSON(200, GetPost())
+		var np model.Company
+
+		if c.ShouldBind(&np) == nil {
+			log.Println(np)
+		}
+		fmt.Println(np)
+		CountRecords()
+		c.JSON(200, GetPost(np))
+
+	})
+	rg.DELETE("/:code", func(c *gin.Context) {
+		code := c.Param("code")
+		DeletCompanyPhysics(code)
+		c.JSON(200, "success")
 	})
 
 }
