@@ -66,13 +66,13 @@ func Update(code string, params model.Post) (*mongo.UpdateResult, error) {
 	return res, err
 }
 
-func Find(code string) model.Post{
+func Find(code string) model.Post {
 	Init()
 	var res model.Post
-	filter:=bson.D{{"code",code}}
+	filter := bson.D{{"code", code}}
 	coll.FindOne(context.TODO(), filter).Decode(&res)
 
-	return res 
+	return res
 }
 func CountRecords() int64 {
 	Init()
@@ -82,12 +82,12 @@ func CountRecords() int64 {
 	fmt.Println(res)
 	return res
 }
-func DeletePostPhysics(cod string) *mongo.SingleResult {
+func DeletePhysic(cod string) *mongo.SingleResult {
 	Init()
 	res := coll.FindOneAndDelete(context.TODO(), bson.D{{"code", cod}})
 	return res
 }
-func DeletePostLogical(cod string) (*mongo.UpdateResult, error) {
+func DeleteLogical(cod string) (*mongo.UpdateResult, error) {
 	Init()
 	params := bson.D{{"status", "Inactive"}}
 	filter := bson.D{{"code", cod}}

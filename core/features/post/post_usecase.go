@@ -38,7 +38,7 @@ func Search(params *model.Post) []model.Post {
 	return result
 }
 func DeletePost(code string) (string, error) {
-	result, err := DeletePostLogical(code)
+	result, err := DeleteLogical(code)
 	if err == nil {
 		log.Println("Object Deleted:", result)
 		return "success", nil
