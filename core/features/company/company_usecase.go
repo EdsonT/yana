@@ -1,16 +1,16 @@
 package company
 
 import (
+	"fmt"
 	"log"
 	"time"
 	"yana/model"
 
 	"github.com/rs/xid"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
 //CreateNewPost initializes primary parameters of a Post, and validate data
-func CreateNewCompany(params *model.Company) (*mongo.InsertOneResult, error) {
+func CreateNewCompany(params *model.Company) *model.Company {
 	np := new(model.Company)
 	np.Code = xid.New().String()
 	np.Name = params.Name
@@ -22,7 +22,8 @@ func CreateNewCompany(params *model.Company) (*mongo.InsertOneResult, error) {
 	np.DateCreated = time.Now()
 	np.LastUpdated = time.Now()
 	result, err := Add(np)
-	return result, err
+	fmt.Println(result, err)
+	return np
 }
 
 func UpdateCompany(code string, params model.Company) model.Company {

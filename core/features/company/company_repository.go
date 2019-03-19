@@ -75,14 +75,6 @@ func Find(code string) model.Company {
 
 	return res
 }
-func FindC(name string) *model.Company {
-	Init()
-	var res *model.Company
-	filter := bson.D{{"name", name}}
-	coll.FindOne(context.TODO(), filter).Decode(&res)
-
-	return res
-}
 func CountRecords() int64 {
 	Init()
 	// var opts *options.EstimatedDocumentCountOptions

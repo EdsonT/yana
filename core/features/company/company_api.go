@@ -36,13 +36,10 @@ func AddRoutes(rg *gin.RouterGroup) {
 
 	rg.POST("/create", func(c *gin.Context) {
 		var np *model.Company
-		var op *model.Company
+		var result *model.Company
 		c.BindJSON(&np)
-		// fmt.Println(c.Param("code"))
-		result, _ := CreateNewCompany(np)
-		fmt.Println(result)
-		op = FindC(np.Name)
-		c.JSON(200, op)
+		result = CreateNewCompany(np)
+		c.JSON(200, result)
 	})
 
 	rg.PUT("/:code", func(c *gin.Context) {
