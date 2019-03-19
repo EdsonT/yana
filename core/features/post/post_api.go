@@ -34,6 +34,20 @@ func AddRoutes(rg *gin.RouterGroup) {
 		c.JSON(200, GetPosts(np))
 
 	})
+	rg.GET("/search", func(c *gin.Context) {
+		type SearchDAO struct {
+			Keyword string `form:"keyword" json:"keyword" bson:"keyword"`
+		}
+		var (
+			sd      SearchDAO
+			keyword string
+		)
+		if c.ShouldBind(&sd) == nil {
+			keyword = sd.Keyword
+		}
+
+		c.JSON(200, Search(keyword))
+	})
 	rg.POST("/create", func(c *gin.Context) {
 		var np *model.Post
 		c.BindJSON(&np)

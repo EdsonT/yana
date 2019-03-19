@@ -66,13 +66,13 @@ func Update(code string, params model.Post) (*mongo.UpdateResult, error) {
 	return res, err
 }
 
-func Find(code string) model.Post{
+func Find(code string) model.Post {
 	Init()
 	var res model.Post
-	filter:=bson.D{{"code",code}}
+	filter := bson.D{{"code", code}}
 	coll.FindOne(context.TODO(), filter).Decode(&res)
 
-	return res 
+	return res
 }
 func CountRecords() int64 {
 	Init()
@@ -80,6 +80,31 @@ func CountRecords() int64 {
 	// opts.SetMaxTime(3)
 	res, _ := coll.EstimatedDocumentCount(context.Background())
 	fmt.Println(res)
+	return res
+}
+func Search(kw string) []*model.Post {
+	Init()
+	var (
+		res []*model.Post
+		cur *mongo.Cursor
+		err error
+	)
+
+	kw = `/.*` + kw + `.*/`
+
+	// skey := bson.M{"$regex": primitive.Regex{Pattern: kw}.Pattern}
+	// skey := bson.M{"$regex": kw}
+	params := bson.M{"title": kw}
+	fmt.Println(params)
+	for cur.Next(context.TODO()) {
+		var elem model.Post
+		err = cur.Decode(&elem)
+		if err != nil {
+			log.Fatal(err)
+		}
+		res = append(res, &elem)
+		fmt.Println(res)
+	}
 	return res
 }
 func DeletePostPhysics(cod string) *mongo.SingleResult {

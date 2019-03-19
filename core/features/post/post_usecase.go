@@ -33,8 +33,10 @@ func GetPosts(params model.Post) []*model.Post {
 	return Get(params)
 }
 
-func Search(params *model.Post) []model.Post {
+func SearchPosts(keyword string) []model.Post {
 	var result []model.Post
+
+
 	return result
 }
 func DeletePost(code string) (string, error) {
