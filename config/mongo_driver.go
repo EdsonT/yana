@@ -13,6 +13,7 @@ var (
 	auth options.Credential
 	err  error
 )
+
 // NewMongoClient creates a mongo client connection with the necessary parameters
 func NewMongoClient() *mongo.Client {
 	opt = &options.ClientOptions{}
@@ -25,11 +26,8 @@ func NewMongoClient() *mongo.Client {
 	opt.SetAuth(auth)
 	opt.ApplyURI("mongodb://ec2-3-18-8-186.us-east-2.compute.amazonaws.com:27017")
 
-	
 	// localConfig
 	// opt.ApplyURI("mongodb://10.31.32.66:27017")
-
-	
 
 	cli, err = mongo.NewClient(opt)
 

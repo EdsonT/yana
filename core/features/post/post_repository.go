@@ -8,6 +8,7 @@ import (
 	"yana/model"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -89,13 +90,9 @@ func Search(kw string) []*model.Post {
 		cur *mongo.Cursor
 		err error
 	)
-
-	kw = `/.*` + kw + `.*/`
-
-	// skey := bson.M{"$regex": primitive.Regex{Pattern: kw}.Pattern}
-	// skey := bson.M{"$regex": kw}
-	params := bson.M{"title": kw}
-	fmt.Println(params)
+	skey := bson.M{"title": primitive.Regex{Pattern: ".*"+kw+".*", Options: "i"}}
+	cur, err = coll.Find(context.Background(), skey)
+	
 	for cur.Next(context.TODO()) {
 		var elem model.Post
 		err = cur.Decode(&elem)
