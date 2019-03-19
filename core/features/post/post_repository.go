@@ -107,12 +107,12 @@ func Search(kw string) []*model.Post {
 	}
 	return res
 }
-func DeletePostPhysics(cod string) *mongo.SingleResult {
+func DeletePostPhysic(cod string) *mongo.SingleResult {
 	Init()
 	res := coll.FindOneAndDelete(context.TODO(), bson.D{{"code", cod}})
 	return res
 }
-func DeletePostLogical(cod string) (*mongo.UpdateResult, error) {
+func DeleteLogical(cod string) (*mongo.UpdateResult, error) {
 	Init()
 	params := bson.D{{"status", "Inactive"}}
 	filter := bson.D{{"code", cod}}

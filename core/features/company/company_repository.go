@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"time"
 	"yana/config"
 	"yana/model"
 
@@ -22,11 +23,11 @@ func Init() {
 	coll = cli.Database("yanaDb").Collection("Company")
 }
 
-func AddPost(mpo *model.Company) (*mongo.InsertOneResult, error) {
+func Add(mpo *model.Company) (*mongo.InsertOneResult, error) {
 	Init()
-	return coll.InsertOne(context.TODO(), mpo)
+	return coll.InsertOne(context.TODO(), mpo) 
 }
-func GetPost(params model.Company) []*model.Company {
+func Get(params model.Company) []*model.Company {
 	var (
 		results []*model.Company
 		cur     *mongo.Cursor
@@ -55,10 +56,24 @@ func GetPost(params model.Company) []*model.Company {
 	}
 	return results
 }
-func FindPost(id string) {
+func Update(code string, params model.Company) (*mongo.UpdateResult, error) {
 	Init()
-	res := coll.FindOne(context.TODO(), id)
-	fmt.Println(res)
+	filter := bson.D{{"code", code}}
+	params.LastUpdated = time.Now()
+	update := bson.D{
+		{"$set", params},
+	}
+	res, err := coll.UpdateOne(context.TODO(), filter, update)
+	return res, err
+
+}
+func Find(code string) model.Company {
+	Init()
+	var res model.Company
+	filter := bson.D{{"code", code}}
+	coll.FindOne(context.TODO(), filter).Decode(&res)
+
+	return res
 }
 func CountRecords() int64 {
 	Init()
@@ -68,13 +83,12 @@ func CountRecords() int64 {
 	fmt.Println(res)
 	return res
 }
-
-func DeletCompanyPhysics(cod string) *mongo.SingleResult {
+func DeletPhysics(cod string) *mongo.SingleResult {
 	Init()
 	res := coll.FindOneAndDelete(context.TODO(), bson.D{{"code", cod}})
 	return res
 }
-func DeletCompanyLogical(cod string) (*mongo.UpdateResult, error) {
+func DeletLogical(cod string) (*mongo.UpdateResult, error) {
 	Init()
 	params := bson.D{{"status", "Inactive"}}
 	filter := bson.D{{"code", cod}}
@@ -84,15 +98,4 @@ func DeletCompanyLogical(cod string) (*mongo.UpdateResult, error) {
 	res, err := coll.UpdateOne(context.TODO(), filter, update)
 	fmt.Println(res, err)
 	return res, err
-}
-func UpdatePost(code string, params model.Company) (*mongo.UpdateResult, error) {
-	Init()
-	filter := bson.D{{"code", code}}
-	update := bson.D{
-		{"$set", params},
-	}
-	res, err := coll.UpdateOne(context.TODO(), filter, update)
-	fmt.Println(res)
-	return res, err
-
 }
