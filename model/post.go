@@ -5,13 +5,14 @@ import (
 )
 
 type Post struct {
-	Code        string    `form:"code,omitempty" json:"code,omitempty" bson:"code,omitempty"`
-	Title       string    `form:"title,omitempty" json:"title,omitempty" bson:"title,omitempty"`
-	Company     string    `form:"company,omitempty" json:"company,omitempty" bson:"company,omitempty"`
-	Location    string    `form:"location,omitempty" json:"location,omitempty" bson:"location,omitempty"`
-	Type        string    `form:"type,omitempty" json:"type,omitempty" bson:"type,omitempty"`
-	Status      string    `form:"status,omitempty" json:"status,omitempty" bson:"status,omitempty"`
-	Description string    `form:"description,omitempty" json:"description,omitempty" bson:"description,omitempty"`
-	DateCreated time.Time `form:"dateCreated,omitempty" json:"dateCreated,omitempty" bson:"dateCreated,omitempty"`
-	LastUpdated time.Time `form:"lastUpdated,omitempty" json:"lastUpdated,omitempty" bson:"lastUpdated,omitempty"`
+	Code        string    `form:"code" bson:"code,omitempty"`
+	Title       string    `form:"title" bson:"title,omitempty"`
+	Company     string    `form:"company" bson:"company,omitempty"`
+	Location    string    `form:"location" bson:"location,omitempty"`
+	Type        string    `form:"type" bson:"type,omitempty"`
+	Status      string    `form:"status" bson:"status,omitempty"`
+	Description string    `form:"description" bson:"description,omitempty"`
+	CreatedAt   time.Time `form:"createdAt" bson:"createdAt,omitempty"`
+	UpdatedAt   time.Time `form:"updatedAt" bson:"updatedAt,omitempty"`
+	DeletedAt   time.Time `form:"deletedAt" bson:"deletedAt,omitempty"`
 }

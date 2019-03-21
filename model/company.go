@@ -10,6 +10,7 @@ type Company struct {
 	Address     string    `form:"address,omitempty" json:"address,omitempty" bson:"address,omitempty"`
 	Status      string    `form:"status,omitempty" json:"status,omitempty" bson:"status,omitempty"`
 	Description string    `form:"description,omitempty" json:"description,omitempty" bson:"description,omitempty"`
-	DateCreated time.Time `form:"dateCreated,omitempty" json:"dateCreated,omitempty" bson:"dateCreated,omitempty"`
-	LastUpdated time.Time `form:"lastUpdated,omitempty" json:"lastUpdated,omitempty" bson:"lastUpdated,omitempty"`
+	CreatedAt   time.Time `form:"createdAt,omitempty" json:"createdAt,omitempty" bson:"createdAt,omitempty"`
+	UpdatedAt   time.Time `form:"updatedAt,omitempty" json:"updatedAt,omitempty" bson:"updatedAt,omitempty"`
+	DeletedAt   time.Time `form:"deletedAt,omitempty" json:"deletedAt,omitempty" bson:"deletedAt,omitempty"`
 }

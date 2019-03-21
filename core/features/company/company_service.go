@@ -19,8 +19,8 @@ func CreateNewCompany(params *model.Company) *model.Company {
 	np.Description = params.Description
 	np.Address = params.Address
 	np.Status = "Active"
-	np.DateCreated = time.Now()
-	np.LastUpdated = time.Now()
+	np.CreatedAt = time.Now()
+	np.UpdatedAt = time.Now()
 	result, err := Add(np)
 	fmt.Println(result, err)
 	return np

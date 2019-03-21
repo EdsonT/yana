@@ -11,6 +11,15 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
+func GetPostCtr(c *gin.Context) {
+	var params model.Post
+
+	if c.ShouldBind(&params) == nil {
+		log.Println(params)
+	}
+	c.JSON(200, GetPostImpl(params))
+}
+
 func SetBaseRoutePost(r *gin.Engine) *gin.Engine {
 	rg := r.Group("posts")
 	AddRoutes(rg)
@@ -24,16 +33,16 @@ func AddRoutes(rg *gin.RouterGroup) {
 			"message": "pong",
 		})
 	})
-	rg.GET("/", func(c *gin.Context) {
-		var np model.Post
+	// rg.GET("/", func(c *gin.Context) {
+	// 	var np model.Post
 
-		if c.ShouldBind(&np) == nil {
-			log.Println(np)
-		}
-		CountRecords()
-		c.JSON(200, GetPosts(np))
+	// 	if c.ShouldBind(&np) == nil {
+	// 		log.Println(np)
+	// 	}
+	// 	CountRecords()
+	// 	c.JSON(200, GetPostsImpl(np))
 
-	})
+	// })
 	rg.GET("/search", func(c *gin.Context) {
 		type SearchDAO struct {
 			Keyword string `form:"keyword" json:"keyword" bson:"keyword"`
@@ -48,13 +57,13 @@ func AddRoutes(rg *gin.RouterGroup) {
 
 		c.JSON(200, Search(keyword))
 	})
-	rg.POST("/create", func(c *gin.Context) {
-		var np *model.Post
-		c.BindJSON(&np)
-		result, _ := CreateNewPost(np)
-		c.JSON(200, result)
+	// rg.POST("/create", func(c *gin.Context) {
+	// 	var np *model.Post
+	// 	c.BindJSON(&np)
+	// 	result, _ := CreateNewPost(np)
+	// 	c.JSON(200, result)
 
-	})
+	// })
 	rg.PUT("/:code", func(c *gin.Context) {
 		var np model.Post
 

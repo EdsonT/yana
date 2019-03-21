@@ -25,7 +25,7 @@ func Init() {
 
 func Add(mpo *model.Company) (*mongo.InsertOneResult, error) {
 	Init()
-	return coll.InsertOne(context.TODO(), mpo) 
+	return coll.InsertOne(context.TODO(), mpo)
 }
 func Get(params model.Company) []*model.Company {
 	var (
@@ -59,7 +59,7 @@ func Get(params model.Company) []*model.Company {
 func Update(code string, params model.Company) (*mongo.UpdateResult, error) {
 	Init()
 	filter := bson.D{{"code", code}}
-	params.LastUpdated = time.Now()
+	params.UpdatedAt = time.Now()
 	update := bson.D{
 		{"$set", params},
 	}
