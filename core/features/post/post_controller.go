@@ -5,25 +5,26 @@ import (
 
 	"fmt"
 	"log"
+	"yana/dao"
 	"yana/model"
 
 	"github.com/gin-gonic/gin"
-	"go.mongodb.org/mongo-driver/bson"
 )
 
 func GetPostCtr(c *gin.Context) {
-	var params model.Post
+	var params dao.Post
 
 	if c.ShouldBind(&params) == nil {
 		log.Println(params)
 	}
 	c.JSON(200, GetPostImpl(params))
 }
+func CreatePostCtr(c *gin.Context) {
+	var params dao.Post
+	c.ShouldBind(&params)
+	res, _ := CreatePostImpl(params)
+	c.JSON(200, res)
 
-func SetBaseRoutePost(r *gin.Engine) *gin.Engine {
-	rg := r.Group("posts")
-	AddRoutes(rg)
-	return r
 }
 
 func AddRoutes(rg *gin.RouterGroup) {
@@ -78,13 +79,13 @@ func AddRoutes(rg *gin.RouterGroup) {
 	// 	DeletePostPhysics(code)
 	// 	c.JSON(200, "success")
 	// })
-	rg.DELETE("/:code", func(c *gin.Context) {
-		res, err := DeletePost(c.Param("code"))
-		if res != "" {
-			c.JSON(200, bson.M{"status": res})
-		} else {
-			c.JSON(500, err)
-		}
-	})
+	// rg.DELETE("/:code", func(c *gin.Context) {
+	// 	res, err := DeletePost(c.Param("code"))
+	// 	if res != "" {
+	// 		c.JSON(200, bson.M{"status": res})
+	// 	} else {
+	// 		c.JSON(500, err)
+	// 	}
+	// })
 
 }

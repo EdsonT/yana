@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"yana/config"
+	"yana/dao"
 	"yana/model"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -27,15 +28,16 @@ func Add(mpo *model.Post) (*mongo.InsertOneResult, error) {
 	Init()
 	return coll.InsertOne(context.TODO(), mpo)
 }
-func Get(params model.Post) []*model.Post {
+func Get(params dao.Post) []*model.Post {
 	var (
 		results []*model.Post
 		cur     *mongo.Cursor
 		err     error
 	)
 	Init()
-
-	cur, err = coll.Find(context.TODO(), params)
+	json, err := bson.Marshal(params)
+	fmt.Println(json)
+	cur, err = coll.Find(context.TODO(), json)
 
 	if err != nil {
 		log.Fatal(err)
@@ -90,9 +92,9 @@ func Search(kw string) []*model.Post {
 		cur *mongo.Cursor
 		err error
 	)
-	skey := bson.M{"title": primitive.Regex{Pattern: ".*"+kw+".*", Options: "i"}}
+	skey := bson.M{"title": primitive.Regex{Pattern: ".*" + kw + ".*", Options: "i"}}
 	cur, err = coll.Find(context.Background(), skey)
-	
+
 	for cur.Next(context.TODO()) {
 		var elem model.Post
 		err = cur.Decode(&elem)

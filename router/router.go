@@ -22,7 +22,7 @@ func InitRoutes(app *gin.Engine) {
 	{
 		posts.GET("/", post.GetPostCtr)
 		posts.GET("/search")
-		posts.POST("/create")
+		posts.POST("/create", post.CreatePostCtr)
 		posts.PUT("/:code/update")
 		posts.DELETE("/:code/delete")
 	}

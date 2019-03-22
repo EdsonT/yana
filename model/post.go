@@ -7,7 +7,7 @@ import (
 type Post struct {
 	Code        string    `form:"code" bson:"code,omitempty"`
 	Title       string    `form:"title" bson:"title,omitempty"`
-	Company     string    `form:"company" bson:"company,omitempty"`
+	Company     Company   `form:"company" bson:"company,omitempty"`
 	Location    string    `form:"location" bson:"location,omitempty"`
 	Type        string    `form:"type" bson:"type,omitempty"`
 	Status      string    `form:"status" bson:"status,omitempty"`
