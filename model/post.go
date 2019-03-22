@@ -5,14 +5,14 @@ import (
 )
 
 type Post struct {
-	Code        string    `form:"code" bson:"code,omitempty"`
-	Title       string    `form:"title" bson:"title,omitempty"`
-	Company     Company   `form:"company" bson:"company,omitempty"`
-	Location    string    `form:"location" bson:"location,omitempty"`
-	Type        string    `form:"type" bson:"type,omitempty"`
-	Status      string    `form:"status" bson:"status,omitempty"`
-	Description string    `form:"description" bson:"description,omitempty"`
-	CreatedAt   time.Time `form:"createdAt" bson:"createdAt,omitempty"`
-	UpdatedAt   time.Time `form:"updatedAt" bson:"updatedAt,omitempty"`
-	DeletedAt   time.Time `form:"deletedAt" bson:"deletedAt,omitempty"`
+	Code        string    `bson:"code,omitempty"`
+	Title       string    `bson:"title,omitempty"`
+	Company     *Company  `bson:"company,omitempty"`
+	Location    string    `bson:"location,omitempty"`
+	Type        string    `bson:"type,omitempty"`
+	Status      string    `bson:"status,omitempty"`
+	Description string    `bson:"description,omitempty"`
+	CreatedAt   time.Time `bson:"createdAt,omitempty"`
+	UpdatedAt   time.Time `bson:"updatedAt,omitempty"`
+	DeletedAt   time.Time `bson:"deletedAt,omitempty"`
 }

@@ -67,9 +67,9 @@ func Update(code string, params model.Company) (*mongo.UpdateResult, error) {
 	return res, err
 
 }
-func Find(code string) (model.Company, error) {
+func Find(code string) (*model.Company, error) {
 	Init()
-	var res model.Company
+	var res *model.Company
 	filter := bson.D{{"code", code}}
 	fmt.Println(filter)
 	err = coll.FindOne(context.TODO(), filter).Decode(&res)

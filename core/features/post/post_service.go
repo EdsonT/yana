@@ -1,9 +1,9 @@
 package post
 
 import (
+	"fmt"
 	"log"
 	"time"
-	"yana/core/features/company"
 	"yana/dao"
 	"yana/model"
 
@@ -12,29 +12,19 @@ import (
 
 //CreatePostImpl  initializes primary parameters of a Post, and validate data
 func CreatePostImpl(params dao.Post) (model.Post, error) {
-	np := new(model.Post)
+	np, err := params.GetPostModel()
 	np.Code = xid.New().String()
-	np.Title = params.Title
-	np.Location = params.Location
-	cp, err := company.Find(params.Company)
-	if cp == (model.Company{}) {
-
-		return model.Post{}, err
-
-	}
-	np.Company = cp
-	np.Type = params.Type
-	np.Status = "Active"
 	np.CreatedAt = time.Now()
-	np.UpdatedAt = time.Now()
-	result, err := Add(np)
+	result, err := Add(&np)
 	log.Println("Object Inserted:", result)
 	return Find(np.Code), err
 }
 
 func GetPostImpl(params dao.Post) []*model.Post {
 	// var listPosts []*model.Post
-	postsFound := Get(params)
+	mPost, err := params.GetPostModel()
+	postsFound := Get(mPost)
+	fmt.Println(err)
 	// for _, post := range postsFound {
 	// 	np := new(dao.Post)
 	// 	np.Code = post.Code

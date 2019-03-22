@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"yana/config"
-	"yana/dao"
 	"yana/model"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -28,17 +27,15 @@ func Add(mpo *model.Post) (*mongo.InsertOneResult, error) {
 	Init()
 	return coll.InsertOne(context.TODO(), mpo)
 }
-func Get(params dao.Post) []*model.Post {
+func Get(params model.Post) []*model.Post {
 	var (
 		results []*model.Post
 		cur     *mongo.Cursor
 		err     error
 	)
 	Init()
-	json, err := bson.Marshal(params)
-	fmt.Println(json)
-	cur, err = coll.Find(context.TODO(), json)
 
+	cur, err = coll.Find(context.TODO(),params)
 	if err != nil {
 		log.Fatal(err)
 	}

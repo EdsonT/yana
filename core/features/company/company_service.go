@@ -26,10 +26,10 @@ func CreateNewCompany(params *model.Company) *model.Company {
 	return np
 }
 
-func UpdateCompany(code string, params model.Company) model.Company {
-	var up model.Company
+func UpdateCompany(code string, params model.Company) *model.Company {
+	var up *model.Company
 	Update(code, params)
-	up,_ = Find(code)
+	up, _ = Find(code)
 	return up
 }
 func GetCompany(params model.Company) []*model.Company {

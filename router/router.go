@@ -1,6 +1,7 @@
 package router
 
 import (
+	"yana/core/features/company"
 	"yana/core/features/post"
 
 	"github.com/gin-gonic/gin"
@@ -20,16 +21,16 @@ func InitRoutes(app *gin.Engine) {
 
 	posts := app.Group("posts")
 	{
-		posts.GET("/", post.GetPostCtr)
+		posts.GET("/", post.GetPostController)
 		posts.GET("/search")
-		posts.POST("/create", post.CreatePostCtr)
+		posts.POST("/create", post.CreatePostController)
 		posts.PUT("/:code/update")
 		posts.DELETE("/:code/delete")
 	}
 	companies := app.Group("companies")
 	{
-		companies.GET("/")
-		companies.POST("/create")
+		companies.GET("/", company.GetCompanyController)
+		companies.POST("/create", company.CreateCompanyController)
 		companies.PUT("/:code/update")
 		companies.DELETE("/:code/delete")
 	}

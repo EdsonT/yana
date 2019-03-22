@@ -9,10 +9,20 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-func SetBaseRoutePost(r *gin.Engine) *gin.Engine {
-	rg := r.Group("company")
-	AddRoutes(rg)
-	return r
+func CreateCompanyController(c *gin.Context) {
+	var np *model.Company
+	var result *model.Company
+	c.BindJSON(&np)
+	result = CreateNewCompany(np)
+	c.JSON(200, result)
+}
+func GetCompanyController(c *gin.Context) {
+	var np model.Company
+
+	if c.ShouldBind(&np) == nil {
+		log.Println(np)
+	}
+	c.JSON(200, GetCompany(np))
 }
 
 func AddRoutes(rg *gin.RouterGroup) {

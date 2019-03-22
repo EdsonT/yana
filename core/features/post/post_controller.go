@@ -11,7 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func GetPostCtr(c *gin.Context) {
+func GetPostController(c *gin.Context) {
 	var params dao.Post
 
 	if c.ShouldBind(&params) == nil {
@@ -19,7 +19,7 @@ func GetPostCtr(c *gin.Context) {
 	}
 	c.JSON(200, GetPostImpl(params))
 }
-func CreatePostCtr(c *gin.Context) {
+func CreatePostController(c *gin.Context) {
 	var params dao.Post
 	c.ShouldBind(&params)
 	res, _ := CreatePostImpl(params)
