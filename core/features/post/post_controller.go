@@ -1,11 +1,13 @@
 package post
 
 import (
+	valid "github.com/asaskevich/govalidator"
 	// "fmt"
 
 	"fmt"
 	"log"
 	"yana/dao"
+	"yana/errors"
 	"yana/model"
 
 	"github.com/gin-gonic/gin"
@@ -20,8 +22,18 @@ func GetPostController(c *gin.Context) {
 	c.JSON(200, GetPostImpl(params))
 }
 func CreatePostController(c *gin.Context) {
+	valid.SetFieldsRequiredByDefault(true)
 	var params dao.Post
 	c.ShouldBind(&params)
+	//get validation
+	validation, err := valid.ValidateStruct(params)
+	if err != nil {
+		var e errors.Error
+		e.SetValidationErrors(valid.ErrorsByField(err))
+		c.JSON(400, e)
+		return
+	}
+	fmt.Println(validation)
 	res, _ := CreatePostImpl(params)
 	c.JSON(200, res)
 
