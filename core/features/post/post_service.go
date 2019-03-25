@@ -1,6 +1,7 @@
 package post
 
 import (
+	"fmt"
 	"log"
 	"time"
 	"yana/core/features/company"
@@ -13,9 +14,8 @@ import (
 )
 
 type PostService struct {
-	errors    *errors.Error `json:"errors,omitempty"`
-	Post      *model.Post   `json:"post,omitempty"`
-	PostsList []*model.Post `json:"posts,omitempty"`
+	errors errors.Error `json:"errors,omitempty"`
+	Posts  interface{}  `json:"metadata,omitempty"`
 }
 
 //CreatePostImpl initializes primary parameters of a Post, and validate data
@@ -28,12 +28,15 @@ func (p *PostService) CreatePostImpl(params dao.Post) {
 	// first validate if all the required params were provided
 	valid.SetFieldsRequiredByDefault(true)
 	_, err := valid.ValidateStruct(params)
+
 	if err != nil {
 		errs.SetValidationErrors(valid.ErrorsByField(err))
-		p.errors = &errs
+		p.errors = errs
+		fmt.Println(errs)
 	} else {
 		// validate if the company provided is in the database, otherwise log and set the error
 		if cp, err := company.Get(params.Company); cp != nil {
+			fmt.Println(cp, err)
 			np.Company = cp
 			np.Code = xid.New().String()
 			np.Status = model.PUBLISH
@@ -43,13 +46,14 @@ func (p *PostService) CreatePostImpl(params dao.Post) {
 			np.Description = params.Description
 			np.CreatedAt = time.Now()
 			// Insert document into the DB
+			fmt.Println(np)
 			inserted, err := Create(&np)
 			if err != nil {
 				errs.SetRepositoryError(valid.ErrorsByField(err))
-				p.errors = &errs
+				p.errors = errs
 			}
 			// Set Response
-			p.Post = &np
+			p.Posts = &np
 			log.Println("[LOG] Object inserted:", inserted.InsertedID)
 
 		} else {
@@ -77,7 +81,7 @@ func (p *PostService) GetPostListImpl(params dao.Post) {
 
 	postsFound := GetList(pm)
 	//returns the all the posts in the response PostService
-	p.PostsList = postsFound
+	p.Posts = postsFound
 }
 
 // func UpdatePost(code string, params model.Post) model.Post {

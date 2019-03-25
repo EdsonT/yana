@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"yana/dao"
+	"yana/errors"
 
 	"github.com/gin-gonic/gin"
 )
@@ -22,14 +23,15 @@ func CreatePostController(c *gin.Context) {
 
 	response.CreatePostImpl(params)
 	fmt.Println(response)
-	if response.errors != nil {
-		fmt.Println(response.errors.ErrorType)
+	if response.errors != (errors.Error{}) {
 		if response.errors.ErrorType == "validation-errors" {
-			c.JSON(http.StatusBadRequest, response)
+			fmt.Println(response.errors)
+
+			c.JSON(http.StatusBadRequest, response.errors)
 			return
 		}
 		if response.errors.ErrorType == "repository-error" {
-			c.JSON(http.StatusInternalServerError, response)
+			c.JSON(http.StatusInternalServerError, response.errors)
 			return
 		}
 	}
