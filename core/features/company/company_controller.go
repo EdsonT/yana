@@ -39,7 +39,7 @@ func AddRoutes(rg *gin.RouterGroup) {
 		if c.ShouldBind(&np) == nil {
 			log.Println(np)
 		}
-		CountRecords()
+
 		c.JSON(200, GetCompany(np))
 
 	})

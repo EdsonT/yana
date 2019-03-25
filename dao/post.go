@@ -1,12 +1,5 @@
 package dao
 
-import (
-	"errors"
-	"time"
-	"yana/core/features/company"
-	"yana/model"
-)
-
 type Post struct {
 	Code        string `form:"code,omitempty" bson:"code,omitempty" valid:"-"`
 	Title       string `form:"title,omitempty" bson:"title,omitempty" valid:"-"`
@@ -20,24 +13,24 @@ type Post struct {
 	DeletedAt   string `form:"deletedAt,omitempty" bson:"deletedAt,omitempty" valid:"optional"`
 }
 
-func (dao *Post) GetPostModel() (model.Post, error) {
-	np := model.Post{}
-	nc, err := company.Find(dao.Company)
-	if (err != nil) || (nc != nil) {
-		np.Code = dao.Code
-		np.Title = dao.Title
-		np.Company = nc
-		np.Location = dao.Location
-		np.Type = dao.Type
-		np.Status = dao.Status
-		np.Description = dao.Description
-		np.CreatedAt, _ = time.Parse(time.RFC3339, dao.CreatedAt)
-		np.UpdatedAt, _ = time.Parse(time.RFC3339, dao.UpdatedAt)
-		np.DeletedAt, _ = time.Parse(time.RFC3339, dao.DeletedAt)
-		return np, err
-	} else {
-		return np, errors.New("Invalid Company")
-	}
-	return np, err
+// func (dao *Post) GetPostModel() (model.Post, error) {
+// 	np := model.Post{}
+// 	nc, err := company.Find(dao.Company)
+// 	if (err != nil) || (nc != nil) {
+// 		np.Code = dao.Code
+// 		np.Title = dao.Title
+// 		np.Company = nc
+// 		np.Location = dao.Location
+// 		np.Type = dao.Type
+// 		np.Status = dao.Status
+// 		np.Description = dao.Description
+// 		np.CreatedAt, _ = time.Parse(time.RFC3339, dao.CreatedAt)
+// 		np.UpdatedAt, _ = time.Parse(time.RFC3339, dao.UpdatedAt)
+// 		np.DeletedAt, _ = time.Parse(time.RFC3339, dao.DeletedAt)
+// 		return np, err
+// 	} else {
+// 		return np, errors.New("Invalid Company")
+// 	}
+// 	return np, err
 
-}
+// }

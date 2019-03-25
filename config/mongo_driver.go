@@ -18,13 +18,13 @@ var (
 func NewMongoClient() *mongo.Client {
 	opt = &options.ClientOptions{}
 	auth = options.Credential{
-		AuthSource: "yanaDb",
+		AuthSource: "yanaDB",
 		Username:   "admin",
 		Password:   "Setitiruces0",
 	}
 	// ec2-mongo
 	opt.SetAuth(auth)
-	opt.ApplyURI("mongodb://ec2-3-18-8-186.us-east-2.compute.amazonaws.com:27017")
+	opt.ApplyURI("mongodb://ec2-18-223-9-60.us-east-2.compute.amazonaws.com:27017")
 
 	// localConfig
 	// opt.ApplyURI("mongodb://10.31.32.66:27017")

@@ -18,43 +18,45 @@ var (
 	coll *mongo.Collection
 )
 
+//Init intializes the conection with the database
 func Init() {
 	cli = config.NewMongoClient()
-	coll = cli.Database("yanaDb").Collection("Posts")
+	coll = cli.Database("yanaDB").Collection("Posts")
 }
 
-func Add(mpo *model.Post) (*mongo.InsertOneResult, error) {
+//Create inserts a new Post document into the database
+func Create(mpo *model.Post) (*mongo.InsertOneResult, error) {
 	Init()
 	return coll.InsertOne(context.TODO(), mpo)
 }
-func Get(params model.Post) []*model.Post {
+
+//GetList retrieves the posts given a criteria based on the Post model
+func GetList(params model.Post) []*model.Post {
 	var (
 		results []*model.Post
 		cur     *mongo.Cursor
-		err     error
 	)
 	Init()
-
-	cur, err = coll.Find(context.TODO(),params)
+	cur, err = coll.Find(context.TODO(), params)
+	//If error encountered when retrieven documents
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
-
 	for cur.Next(context.TODO()) {
 		var elem model.Post
 		err = cur.Decode(&elem)
 		if err != nil {
-			log.Fatal(err)
+			log.Println(err)
 		}
 		results = append(results, &elem)
-
 	}
-
 	if err := cur.Err(); err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 	return results
 }
+
+//Update function update a Post with a given valid Post Model
 func Update(code string, params model.Post) (*mongo.UpdateResult, error) {
 	Init()
 	filter := bson.D{{"code", code}}
@@ -62,11 +64,11 @@ func Update(code string, params model.Post) (*mongo.UpdateResult, error) {
 		{"$set", params},
 	}
 	res, err := coll.UpdateOne(context.TODO(), filter, update)
-	fmt.Println(res)
 	return res, err
 }
 
-func Find(code string) model.Post {
+// Get one Post by its code
+func Get(code string) model.Post {
 	Init()
 	var res model.Post
 	filter := bson.D{{"code", code}}
@@ -74,14 +76,15 @@ func Find(code string) model.Post {
 
 	return res
 }
+
+// CountRecords counts the number of documents
 func CountRecords() int64 {
 	Init()
-	// var opts *options.EstimatedDocumentCountOptions
-	// opts.SetMaxTime(3)
 	res, _ := coll.EstimatedDocumentCount(context.Background())
-	fmt.Println(res)
 	return res
 }
+
+// Search returns a list of records based on a Search model
 func Search(kw string) []*model.Post {
 	Init()
 	var (
@@ -103,11 +106,15 @@ func Search(kw string) []*model.Post {
 	}
 	return res
 }
-func DeletePostPhysic(cod string) *mongo.SingleResult {
+
+//DeletePhysical will remove the document from the database
+func DeletePhysical(cod string) *mongo.SingleResult {
 	Init()
 	res := coll.FindOneAndDelete(context.TODO(), bson.D{{"code", cod}})
 	return res
 }
+
+//DeleteLogical will deactivate the document
 func DeleteLogical(cod string) (*mongo.UpdateResult, error) {
 	Init()
 	params := bson.D{{"status", "Inactive"}}

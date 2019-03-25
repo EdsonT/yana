@@ -20,14 +20,14 @@ var (
 
 func Init() {
 	cli = config.NewMongoClient()
-	coll = cli.Database("yanaDb").Collection("Company")
+	coll = cli.Database("yanaDB").Collection("Company")
 }
 
-func Add(mpo *model.Company) (*mongo.InsertOneResult, error) {
+func Create(mpo *model.Company) (*mongo.InsertOneResult, error) {
 	Init()
 	return coll.InsertOne(context.TODO(), mpo)
 }
-func Get(params model.Company) []*model.Company {
+func GetList(params model.Company) []*model.Company {
 	var (
 		results []*model.Company
 		cur     *mongo.Cursor
@@ -67,11 +67,10 @@ func Update(code string, params model.Company) (*mongo.UpdateResult, error) {
 	return res, err
 
 }
-func Find(code string) (*model.Company, error) {
+func Get(code string) (*model.Company, error) {
 	Init()
 	var res *model.Company
 	filter := bson.D{{"code", code}}
-	fmt.Println(filter)
 	err = coll.FindOne(context.TODO(), filter).Decode(&res)
 	return res, err
 }

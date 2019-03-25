@@ -1,48 +1,91 @@
 package post
 
 import (
-	"fmt"
 	"log"
 	"time"
+	"yana/core/features/company"
 	"yana/dao"
+	"yana/errors"
 	"yana/model"
 
+	valid "github.com/asaskevich/govalidator"
 	"github.com/rs/xid"
 )
 
-//CreatePostImpl  initializes primary parameters of a Post, and validate data
-func CreatePostImpl(params dao.Post) (model.Post, error) {
-	np, err := params.GetPostModel()
-	np.Code = xid.New().String()
-	np.CreatedAt = time.Now()
-	result, err := Add(&np)
-	log.Println("Object Inserted:", result)
-	return Find(np.Code), err
+type PostService struct {
+	errors    *errors.Error `json:"errors,omitempty"`
+	Post      *model.Post   `json:"post,omitempty"`
+	PostsList []*model.Post `json:"posts,omitempty"`
 }
 
-func GetPostImpl(params dao.Post) []*model.Post {
-	// var listPosts []*model.Post
-	mPost, err := params.GetPostModel()
-	postsFound := Get(mPost)
-	fmt.Println(err)
-	// for _, post := range postsFound {
-	// 	np := new(dao.Post)
-	// 	np.Code = post.Code
-	// 	np.Title = post.Title
-	// 	np.Status = post.Status
-	// 	np.Location = post.Location
-	// 	np.Company, err = company.Find(post.Company.Code)
-	// 	listPosts = append(listPosts, np)
-	// }
+//CreatePostImpl initializes primary parameters of a Post, and validate data
+func (p *PostService) CreatePostImpl(params dao.Post) {
+	var (
+		np   model.Post
+		errs errors.Error
+	)
 
-	return postsFound
+	// first validate if all the required params were provided
+	valid.SetFieldsRequiredByDefault(true)
+	_, err := valid.ValidateStruct(params)
+	if err != nil {
+		errs.SetValidationErrors(valid.ErrorsByField(err))
+		p.errors = &errs
+	} else {
+		// validate if the company provided is in the database, otherwise log and set the error
+		if cp, err := company.Get(params.Company); cp != nil {
+			np.Company = cp
+			np.Code = xid.New().String()
+			np.Status = model.PUBLISH
+			np.Title = params.Title
+			np.Type = params.Type
+			np.Location = params.Location
+			np.Description = params.Description
+			np.CreatedAt = time.Now()
+			// Insert document into the DB
+			inserted, err := Create(&np)
+			if err != nil {
+				errs.SetRepositoryError(valid.ErrorsByField(err))
+				p.errors = &errs
+			}
+			// Set Response
+			p.Post = &np
+			log.Println("[LOG] Object inserted:", inserted.InsertedID)
+
+		} else {
+			p.errors.SetNotFoundOptionError(params.Company)
+			log.Println(err)
+		}
+
+	}
+
 }
-func UpdatePost(code string, params model.Post) model.Post {
-	var up model.Post
-	Update(code, params)
-	up = Find(code)
-	return up
+
+//GetPostImpl retrieves the Posts with a simple creteria
+func (p *PostService) GetPostListImpl(params dao.Post) {
+	var pm model.Post
+	pm.Code = params.Code
+	pm.Title = params.Title
+	pm.Status = params.Status
+	pm.Location = params.Location
+
+	//Get the company if provided
+	if params.Company != "" {
+		pm.Company, err = company.Get(params.Company)
+	}
+	pm.CreatedAt, _ = time.Parse(time.RFC3339, params.CreatedAt)
+
+	postsFound := GetList(pm)
+	//returns the all the posts in the response PostService
+	p.PostsList = postsFound
 }
+
+// func UpdatePost(code string, params model.Post) model.Post {
+// 	var up model.Post
+// 	Update(code, params)
+// 	up = Get(code)
+// 	return up
+// }
 
 // // func SearchPosts(keyword string) []model.Post {
 // // 	var result []model.Post

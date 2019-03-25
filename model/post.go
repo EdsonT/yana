@@ -4,6 +4,12 @@ import (
 	"time"
 )
 
+const (
+	PUBLISH string = "published"
+	DRAFT   string = "draft"
+	DELETED string = "deleted"
+)
+
 type Post struct {
 	Code        string    `bson:"code,omitempty"`
 	Title       string    `bson:"title,omitempty"`

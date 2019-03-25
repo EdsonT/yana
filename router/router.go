@@ -21,7 +21,7 @@ func InitRoutes(app *gin.Engine) {
 
 	posts := app.Group("posts")
 	{
-		posts.GET("/", post.GetPostController)
+		posts.GET("/", post.GetPostListController)
 		posts.GET("/search")
 		posts.POST("/create", post.CreatePostController)
 		posts.PUT("/:code/update")

@@ -21,7 +21,7 @@ func CreateNewCompany(params *model.Company) *model.Company {
 	np.Status = "Active"
 	np.CreatedAt = time.Now()
 	np.UpdatedAt = time.Now()
-	result, err := Add(np)
+	result, err := Create(np)
 	fmt.Println(result, err)
 	return np
 }
@@ -29,11 +29,11 @@ func CreateNewCompany(params *model.Company) *model.Company {
 func UpdateCompany(code string, params model.Company) *model.Company {
 	var up *model.Company
 	Update(code, params)
-	up, _ = Find(code)
+	up, _ = Get(code)
 	return up
 }
 func GetCompany(params model.Company) []*model.Company {
-	return Get(params)
+	return GetList(params)
 }
 
 func Search(params *model.Company) []model.Company {
