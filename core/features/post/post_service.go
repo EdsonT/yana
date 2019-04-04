@@ -78,10 +78,8 @@ func (p *PostService) GetPostListImpl(params dao.Post) {
 		pm.Company, err = company.Get(params.Company)
 	}
 	pm.CreatedAt, _ = time.Parse(time.RFC3339, params.CreatedAt)
-
-	postsFound := GetList(pm)
 	//returns the all the posts in the response PostService
-	p.Posts = postsFound
+	p.Posts = GetList(pm)
 }
 
 // func UpdatePost(code string, params model.Post) model.Post {
