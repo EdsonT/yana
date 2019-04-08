@@ -26,6 +26,7 @@
   </v-container>
 </template>
 <script>
+import axios from "axios";
 export default {
   data: () => ({
     items: ["Remote", "Local"],
@@ -33,11 +34,18 @@ export default {
     description: "",
     company: "",
     location: "",
-    type: ""
+    type: "asd"
   }),
   methods: {
     onSubmit(){
-      alert('submitting')
+      axios.post('http://localhost:8080/posts/create',{
+        title:this.title,
+        description:this.description,
+        company:this.company,
+        location:this.location,
+        type:this.type,
+        status:"asd"
+      });
     }
   },
 };

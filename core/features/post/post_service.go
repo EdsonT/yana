@@ -54,6 +54,7 @@ func (p *PostService) CreatePostImpl(params dao.Post) {
 			}
 			// Set Response
 			p.Posts = &np
+
 			log.Println("[LOG] Object inserted:", inserted.InsertedID)
 
 		} else {

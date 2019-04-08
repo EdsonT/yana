@@ -16,7 +16,10 @@
     </v-toolbar>
 
     <v-content>
+      <ListPost/>
+
       <AddPost/>
+
     </v-content>
   </v-app>
 </template>
@@ -24,11 +27,13 @@
 <script>
 // import HelloWorld from './components/HelloWorld'
 import AddPost from './components/AddPost'
+import ListPost from './components/ListPost'
 
 export default {
   name: 'App',
   components: {
-    AddPost
+    AddPost,
+    ListPost
   },
   data () {
     return {

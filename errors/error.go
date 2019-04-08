@@ -1,5 +1,7 @@
 package errors
 
+import "fmt"
+
 type M map[string]interface{}
 
 type Error struct {
@@ -19,10 +21,13 @@ func (e *Error) SetValidationErrors(errs map[string]string) {
 }
 
 func (e *Error) SetNotFoundOptionError(key string) {
+	ie = make(map[string]string)
 	e.Code = codeList["model-not-found"]["code"]
 	e.Status = codeList["model-not-found"]["status"]
 	e.ErrorType = codeList["model-not-found"]["status_text"]
+	
 	ie[key] = "Is not a valid option or could not be found"
+	fmt.Println(e)
 	e.InnerErrors = &ie
 }
 
@@ -50,10 +55,10 @@ var codeList = map[string]map[string]string{
 		"status_text": "Unprocessable Entity",
 		"reason":      "Validation of <no value> failed",
 	},
-	"models-not_found": {
+	"model-not-found": {
 		"code":        "Y5004",
 		"status":      "404",
-		"status_text": "not-found",
+		"status_text": "entity-not-found",
 		"reason":      "Could not find {{.resource}} with id `{{.id}}`",
 	},
 	"repository-error": {

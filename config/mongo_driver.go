@@ -19,7 +19,7 @@ func NewMongoClient() *mongo.Client {
 	opt = &options.ClientOptions{}
 	auth = options.Credential{
 		AuthSource: "yanaDB",
-		Username:   "admin",
+		Username:   "adminYana",
 		Password:   "Setitiruces0",
 	}
 	// ec2-mongo

@@ -13,16 +13,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var response PostService
-
 // CreatePostController set response in json format
 func CreatePostController(c *gin.Context) {
 	// Bind the body request into Post Dao
+	response := new(PostService)
 	var params dao.Post
 	c.ShouldBind(&params)
-
+	fmt.Println(response.errors.ErrorType)
 	response.CreatePostImpl(params)
-	fmt.Println(response)
 	if response.errors != (errors.Error{}) {
 		if response.errors.ErrorType == "validation-errors" {
 			fmt.Println(response.errors)
@@ -30,7 +28,8 @@ func CreatePostController(c *gin.Context) {
 			c.JSON(http.StatusBadRequest, response.errors)
 			return
 		}
-		if response.errors.ErrorType == "repository-error" {
+		if response.errors.ErrorType == "entity-not-found" {
+			fmt.Println(response)
 			c.JSON(http.StatusInternalServerError, response.errors)
 			return
 		}
@@ -40,6 +39,7 @@ func CreatePostController(c *gin.Context) {
 }
 func GetPostListController(c *gin.Context) {
 	var params dao.Post
+	response := new(PostService)
 	if c.ShouldBind(&params) == nil {
 		log.Println(params)
 	}
