@@ -2,9 +2,9 @@ package dao
 
 type Post struct {
 	Code        string `form:"code,omitempty" bson:"code,omitempty" valid:"-"`
-	Title       string `form:"title,omitempty" bson:"title,omitempty" valid:"-"`
-	Company     string `form:"company," bson:"company,omitempty" valid:"-"`
-	Location    string `form:"location,omitempty" bson:"location,omitempty" valid:"-"`
+	Title       string `form:"title,omitempty" bson:"title,omitempty" valid:"required"`
+	Company     string `form:"company," bson:"company,omitempty" valid:"required"`
+	Location    string `form:"location,omitempty" bson:"location,omitempty" valid:"required"`
 	Type        string `form:"type,omitempty" bson:"type,omitempty" valid:"required~Value required"`
 	Status      string `form:"status,omitempty" bson:"status,omitempty" valid:"required"`
 	Description string `form:"description,omitempty" bson:"description,omitempty" valid:"optional"`

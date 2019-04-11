@@ -16,7 +16,7 @@
     </v-toolbar>
 
     <v-content>
-      <ListPost/>
+      <!-- <ListPost/> -->
 
       <AddPost/>
 
