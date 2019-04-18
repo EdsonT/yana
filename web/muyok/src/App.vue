@@ -27,13 +27,12 @@
 <script>
 // import HelloWorld from './components/HelloWorld'
 import AddPost from './components/AddPost'
-import ListPost from './components/ListPost'
-
+// import ListPost from './components/ListPost'
 export default {
   name: 'App',
   components: {
     AddPost,
-    ListPost
+    // ListPost
   },
   data () {
     return {
@@ -41,4 +40,5 @@ export default {
     }
   }
 }
+
 </script>

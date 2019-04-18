@@ -1,71 +1,102 @@
 <template>
-  <v-container grid-list-md>
-    <v-form ref="form">
-      <v-text-field 
-        :counter="10" 
-        :rules="titleRules"
-        required 
-        id="title" 
-        label="Post Title:" 
-        v-model="title"
-        ></v-text-field>
-      <v-layout wrap justify-space-between>
-        <v-flex xs12>
-          <v-text-field required id="title" label="Post Title:" v-model="title"></v-text-field>
-          <v-textarea id="description" outline label="Description:" v-model="description"></v-textarea>
-        </v-flex>
-        <v-flex xs12>
-          <v-text-field id="company" label="Company" v-model="company"></v-text-field>
-        </v-flex>
-        <v-flex xs6>
-          <v-text-field id="location" label="Location" v-model="location"></v-text-field>
-        </v-flex>
-        <v-flex xs6>
-          <v-select id="type" :items="items" label="Type" v-model="type"></v-select>
-        </v-flex>
-    
-      </v-layout>
+  <form>
+    <v-text-field
+      v-model="name"
+      v-validate="'required|max:10'"
+      :counter="10"
+      :error-messages="errors.collect('name')"
+      label="Name"
+      data-vv-name="name"
+      required
+    ></v-text-field>
+    <v-text-field
+      v-model="email"
+      v-validate="'required|email'"
+      :error-messages="errors.collect('email')"
+      label="E-mail"
+      data-vv-name="email"
+      required
+    ></v-text-field>
+    <v-select
+      v-model="select"
+      v-validate="'required'"
+      :items="items"
+      :error-messages="errors.collect('select')"
+      label="Select"
+      data-vv-name="select"
+      required
+    ></v-select>
+    <v-checkbox
+      v-model="checkbox"
+      v-validate="'required'"
+      :error-messages="errors.collect('checkbox')"
+      value="1"
+      label="Option"
+      data-vv-name="checkbox"
+      type="checkbox"
+      required
+    ></v-checkbox>
 
-      <v-btn @click="onSubmit">Submit</v-btn>
-      <v-btn color="warning">Cancel</v-btn>
-    </v-form>
-    
-  </v-container>
+    <v-btn @click="submit">submit</v-btn>
+    <v-btn @click="clear">clear</v-btn>
+  </form>
 </template>
-<script>
-import axios from "axios";
-export default {
-  data: () => ({
-    items: ["Remote", "Local"],
-    title: "",
-    description: "",
-    company: "",
-    location: "",
-    type: "asd",
-    titleRules:[
-      v=>!!v ||'Title is Required',
-      v=>v.length <=10 || 'Title must be less than 10 characters'
-    ]
 
-  }),
-  methods: {
-    onSubmit() {
-      axios
-        .post("http://localhost:8080/posts/create", {
-          title: this.title,
-          description: this.description,
-          company: this.company,
-          location: this.location,
-          type: this.type,
-          status: "asd",
-          errors: new Errors()
-        })
-        .then(response => alert(response))
-        .catch(error => this.errors=error.response.data);
+<script>
+  import Vue from 'vue'
+  import VeeValidate from 'vee-validate'
+
+  Vue.use(VeeValidate)
+
+  export default {
+    $_veeValidate: {
+      validator: 'new'
+    },
+
+    data: () => ({
+      name: '',
+      email: '',
+      select: null,
+      items: [
+        'Item 1',
+        'Item 2',
+        'Item 3',
+        'Item 4'
+      ],
+      checkbox: null,
+      // dictionary: {
+      //   attributes: {
+      //     email: 'E-mail Address'
+      //     // custom attributes
+      //   },
+      //   custom: {
+      //     name: {
+      //       required: () => 'Name can not be asdempty',
+      //       max: 'The name field may not be greater than 10 characters'
+      //       // custom messages
+      //     },
+      //     select: {
+      //       required: 'Select field is required'
+      //     }
+      //   }
+      // }
+    }),
+
+    mounted () {
+      this.$validator.localize('en', this.dictionary)
+    },
+
+    methods: {
+      submit () {
+        this.$validator.validateAll()
+      },
+      clear () {
+        this.name = ''
+        this.email = ''
+        this.select = null
+        this.checkbox = null
+        this.$validator.reset()
+      }
     }
   }
-  
-};
 </script>
-<style lang="">
-</style>
