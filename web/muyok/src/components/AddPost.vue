@@ -1,41 +1,42 @@
 <template>
-  <form>
+  <form >
     <v-text-field
-      v-model="name"
+      v-model="title"
       v-validate="'required|max:10'"
       :counter="10"
-      :error-messages="errors.collect('name')"
-      label="Name"
-      data-vv-name="name"
+      :error-messages="errors.collect('title')"
+      label="Title"
+      data-vv-name="title"
+      required
+    ></v-text-field>
+    <span v-text="errorsResponse.get('Title')"></span>
+    <v-text-field
+      v-model="company"
+      v-validate="'required|max:10'"
+      :counter="10"
+      :error-messages="errors.collect('company')"
+      label="Company Name"
+      data-vv-name="company"
       required
     ></v-text-field>
     <v-text-field
-      v-model="email"
-      v-validate="'required|email'"
-      :error-messages="errors.collect('email')"
-      label="E-mail"
-      data-vv-name="email"
+      v-model="location"
+      v-validate="'required|max:10'"
+      :counter="10"
+      :error-messages="errors.collect('location')"
+      label="Location"
+      data-vv-name="location"
       required
     ></v-text-field>
-    <v-select
-      v-model="select"
+      <v-select
+      v-model="type"
       v-validate="'required'"
       :items="items"
-      :error-messages="errors.collect('select')"
-      label="Select"
-      data-vv-name="select"
+      :error-messages="errors.collect('type')"
+      label="Job Type"
+      data-vv-name="type"
       required
     ></v-select>
-    <v-checkbox
-      v-model="checkbox"
-      v-validate="'required'"
-      :error-messages="errors.collect('checkbox')"
-      value="1"
-      label="Option"
-      data-vv-name="checkbox"
-      type="checkbox"
-      required
-    ></v-checkbox>
 
     <v-btn @click="submit">submit</v-btn>
     <v-btn @click="clear">clear</v-btn>
@@ -43,58 +44,81 @@
 </template>
 
 <script>
-  import Vue from 'vue'
-  import VeeValidate from 'vee-validate'
-
-  Vue.use(VeeValidate)
-
+import axios from "axios";
+  class ErrorsResponse{
+    constructor(){
+      this.errorsResponse={ };
+    }
+    get(field){
+      if(this.errorsResponse[field]){
+         return this.errorsResponse[field];
+      }
+    }
+    record(errorsResponse){
+      this.errorsResponse=errorsResponse;
+    }
+  }
   export default {
     $_veeValidate: {
       validator: 'new'
     },
 
     data: () => ({
-      name: '',
-      email: '',
-      select: null,
-      items: [
-        'Item 1',
-        'Item 2',
-        'Item 3',
-        'Item 4'
+      title:'',
+      company:'',
+      location: '',
+      status:'active',
+      type:null,
+      items:[
+        'Remote Job',
+        'Local Job'
       ],
-      checkbox: null,
-      // dictionary: {
-      //   attributes: {
-      //     email: 'E-mail Address'
-      //     // custom attributes
-      //   },
-      //   custom: {
-      //     name: {
-      //       required: () => 'Name can not be asdempty',
-      //       max: 'The name field may not be greater than 10 characters'
-      //       // custom messages
-      //     },
-      //     select: {
-      //       required: 'Select field is required'
-      //     }
-      //   }
-      // }
+      dictionary: {
+        attributes: {
+          email: 'E-mail Address'
+          // custom attributes
+        },
+        custom: {
+          title: {
+            required: () =>this.errorsResponse.get('Title'),
+            max: 'The Title field may not be greater than 10 characters'
+            // custom messages
+          },
+          select: {
+            required: 'Select field is required'
+          }
+        }
+      },
+      errorsResponse:new ErrorsResponse()
     }),
 
     mounted () {
       this.$validator.localize('en', this.dictionary)
+      
     },
 
     methods: {
       submit () {
         this.$validator.validateAll()
+        axios
+        .post("http://localhost:8080/posts/create", {
+          title: this.title,
+          description: this.description,
+          company: this.company,
+          location: this.location,
+          type: this.type,
+          status: this.status
+        }).then(response => alert(response))
+          .catch(error=>this.errorsResponse.record(error.response.data.InnerErrors));
+        
       },
       clear () {
-        this.name = ''
-        this.email = ''
-        this.select = null
-        this.checkbox = null
+        this.title='',
+        this.company='',
+        this.location= "",
+        this.status='',
+        this.type=null,
+      
         this.$validator.reset()
       }
     }
